@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+
+        var characters = [' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        var errorMessage = '<div class="alert alert-danger">' +
+            '        <strong>Invalid Data! </strong></div>';
+
+        var key;
+        var map1 = {};
+        var map2 = {};
+        $(function () {
+            $("#errorHandling").hide();
+            $("#encrypt").on("click", function () {
+                    var plainText = $("#plainText").val();
+                    var key = $("#key1").val();
+                    console.log("valori=", plainText, key);
+
+                    console.log("Text=", plainText);
+                    var isPlainText = checkPlainText(plainText)
+                    var isKey = checkPlainText(key)
+                    if (!isPlainText || !isKey) {
+                        var currentErrorMsj = errorMessage;
+                        errorMessage += 'invalid characters only english chars are valid and space';
+                        $("#errorHandling div").empty();
+                        $("#errorHandling").html(errorMessage);
+                        $("#errorHandling").show();
+                        return;
+                    }
+                    if (typeof plainText == undefined || typeof key == undefined) {
+                        errorMessage += 'both fields are requiered';
+                        $("#errorHandling div").empty();
+                        $("#errorHandling").html(errorMessage);
+                        $("#errorHandling").show();
+                        return;
+                    }
+                    if (!checkKey(key)) {
+                        errorMessage += 'key must have 27 characters and diff';
+                        $("#errorHandling div").empty();
+                        $("#errorHandling").html(errorMessage);
+                        $("#errorHandling").show();
+                        return;
+                    }
+
+
+                    for (var i = 0; i < characters.length; i++) {
+                        map1[characters[i]] = key[i];
+
+                    }
+                    $("#errorHandling").hide();
+                    encrypt(plainText);
+                }
+            );
+            $("#decrypt").on("click", function () {
+                var key = $("#key2").val();
+                console.log("Decrypt key", key);
+                var cypherText = $("#cypherText").val();
+                var isKey = checkPlainText(key);
+                var isPlainText = checkPlainText(cypherText);
+                if (!isPlainText || !isKey) {
+                    var currentErrorMsj = errorMessage;
+                    errorMessage += 'invalid characters only english chars are valid and space';
+                    $("#errorHandling").empty();
+                    $("#errorHandling").html(errorMessage);
+                    $("#errorHandling").show();
+                    return;
+                }
+                if (cypherText == undefined || key == undefined) {
+                    errorMessage += 'both fields are requiered';
+                    $("#errorHandling").empty();
+                    $("#errorHandling").html(errorMessage);
+                    $("#errorHandling").show();
+                    return;
+                }
+                if (!checkKey(key)) {
+                    errorMessage += 'key must have 27 characters and diff';
+                    $("#errorHandling").empty();
+                    $("#errorHandling").html(errorMessage);
+                    $("#errorHandling").show();
+                    return;
+                }
+
+                console.log("cypher text=", cypherText);
+                for (var i = 0; i < characters.length; i++) {
+                    map2[key[i]] = characters[i];
+
+                }
+                console.log("MAP2=", map2);
+                $("#errorHandling").hide();
+                decrypt(cypherText);
+
+
+            });
+
+            function checkPlainText(aux) {
+                console.log("check")
+                x = aux.toLowerCase();
+                console.log("X de verificat", x);
+                var bool = true;
+                for (var i = 0; i < x.length; i++) {
+                    if (!characters.includes(x[i])) {
+                        bool = false;
+                    }
+                }
+                console.log(x);
+                return bool;
+            }
+
+            function encrypt(aux) {
+                x = aux.toLowerCase();
+                var cypherText = '';
+                for (var i = 0; i < x.length; i++) {
+                    cypherText += map1[x[i]];
+                }
+                console.log("cypherText=", cypherText);
+                $("#result").text(cypherText.toUpperCase());
+
+
+            }
+
+            function decrypt(y) {
+                var aux = y.toLowerCase();
+                var newPlainText = '';
+                for (var i = 0; i < aux.length; i++) {
+                    newPlainText += map2[aux[i]];
+                    console.log("Corespondent =", map2[aux[i]], " cypher character=", aux[i]);
+                }
+                console.log("Y=", y);
+                console.log("decrypText=", newPlainText);
+                $("#decryption").text(newPlainText.toLowerCase());
+
+            }
+
+            function checkKey(key) {
+                console.log("check key!!!!!!!!");
+                if (key.length < 27)
+                    return false;
+                for (var i = 0; i < characters.length; i++) {
+                    var count = 0;
+                    for (var j = 0; j < key.length; j++) {
+                        if (characters[i] == key[i]) {
+                            count++;
+                        }
+                    }
+                    if (count > 1)
+                        return false;
+
+                }
+                return true;
+            }
+        });
+
+    </script>
+
+</head>
+<body>
+<div class="row" style="margin: 15px">
+    <input type="text" id="plainText" placeholder="enter plain text...">
+    <input type="text" id="key1" placeholder="Key">
+    <input class="btn btn-primary" type="button" id="encrypt" value="Encrypt">
+
+</div>
+<div class="row" style="margin: 15px">
+    <input type="text" id="cypherText" placeholder="enter cypher text...">
+    <input type="text" id="key2" placeholder="Key">
+    <input class="btn btn-success" type="button" id="decrypt" value="Decrypt">
+</div>
+<div id="result" class="label label-primary" style="font-size: 150%">
+    Result:
+</div>
+<div id="decryption" class="label label-success" style="font-size: 150%">
+    Decryption:
+</div>
+
+<div id="errorHandling" style="margin: 15px" class="alert alert-danger">
+    <strong>Invalid Data! </strong>
+
+
+</div>
+</body>
+
+</html>

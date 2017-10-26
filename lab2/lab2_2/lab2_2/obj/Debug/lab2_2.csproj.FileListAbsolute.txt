@@ -1,0 +1,10 @@
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.csprojResolveAssemblyReference.cache
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.Form1.resources
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.Properties.Resources.resources
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.csproj.GenerateResource.Cache
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.csproj.CoreCompileInputs.cache
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\bin\Debug\lab2_2.exe.config
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\bin\Debug\lab2_2.exe
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\bin\Debug\lab2_2.pdb
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.exe
+C:\Faculta\Crypto\lab2\lab2_2\lab2_2\obj\Debug\lab2_2.pdb
