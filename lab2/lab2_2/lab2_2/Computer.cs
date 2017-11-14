@@ -10,7 +10,6 @@ namespace lab2_2
 {
     class Computer
     {
-
         public int gcdScaderi(int a, int b)
         {
             while (a != b)
@@ -21,8 +20,8 @@ namespace lab2_2
                     b = b - a;
             }
             return a;
-
         }
+
         public int gcdEuclid(int a, int b)
         {
             int temp = 0;
@@ -40,19 +39,25 @@ namespace lab2_2
             }
             return a;
         }
+
         public int gcdFor(int a, int b)
         {
             int d = 1;
+            int aux2;
             int aux;
-            if (a > b)
-                aux = a;
-            else
+            if (a < b)
             {
                 aux = b;
+                aux2 = a;
             }
-            for (int i = 1; i < Convert.ToInt32(Math.Sqrt(aux)); i++)
+            else
             {
-                if (aux % i == 0)
+                aux = a;
+                aux2 = b;
+            }
+            for (int i = 2; i < Convert.ToInt32(Math.Sqrt(aux)); i++)
+            {
+                if (aux % i == 0 && aux2 % i == 00)
                 {
                     d = i;
                 }
@@ -60,7 +65,8 @@ namespace lab2_2
 
             return d;
         }
-        public BigInteger gcdNrMari(BigInteger a , BigInteger b)
+
+        public BigInteger gcdNrMari(BigInteger a, BigInteger b)
         {
             BigInteger temp = 0;
             if (a < b)
@@ -76,7 +82,6 @@ namespace lab2_2
                 b = temp;
             }
             return a;
-
         }
     }
 }
