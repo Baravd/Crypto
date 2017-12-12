@@ -22,30 +22,59 @@ namespace lab4
 
             BigInteger a = BigInteger.Parse("2");
 
-            int k = (int) lcmForList(generateBoundList(B));
-            Console.WriteLine(k);
             List<BigInteger> predefinedNumbers= new List<BigInteger>();
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            
 
-            predefinedNumbers.Add(BigInteger.Parse("10001000002"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000004"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000006"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000008"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000010"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000030"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000045"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000096"));
-            predefinedNumbers.Add(BigInteger.Parse("10001000034"));
-            predefinedNumbers.Add(BigInteger.Parse("10001003245234"));
-            watch.Stop();
+            predefinedNumbers.Add(BigInteger.Parse("4204458777"));
+            predefinedNumbers.Add(BigInteger.Parse("8921796065"));
+            predefinedNumbers.Add(BigInteger.Parse("6057318955"));
+            predefinedNumbers.Add(BigInteger.Parse("1281936157"));
+            predefinedNumbers.Add(BigInteger.Parse("8733973167"));
+            predefinedNumbers.Add(BigInteger.Parse("1033554461"));
+            predefinedNumbers.Add(BigInteger.Parse("7986611107"));
+            predefinedNumbers.Add(BigInteger.Parse("7460145079"));
+            predefinedNumbers.Add(BigInteger.Parse("9218338053"));
+            predefinedNumbers.Add(BigInteger.Parse("1275948761"));
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             foreach (var predefinedNumber in predefinedNumbers)
             {
-                //computePollardP1();
+                computeClassicalFactorization(predefinedNumber);
             }
+            watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Time="+elapsedMs);
+
+            watch.Start();
+            int k = (int)lcmForList(generateBoundList(B));
+            foreach (var predefinedNumber in predefinedNumbers)
+            {
+                computePollardP1(a,k,predefinedNumber,B);
+            }
+            watch.Stop();
+            var elapsedMs2 = watch.ElapsedMilliseconds;
+            Console.WriteLine("Time For classic="+elapsedMs);
+            Console.WriteLine("Time For Pollar p-1=" + elapsedMs2);
+            Console.ReadLine();
 
             computePollardP1(a, k, n, B);
+        }
+
+        private static void computeClassicalFactorization(BigInteger value)
+        {
+            BigInteger aux = BigInteger.Parse("2");
+            BigInteger counter = value * value;
+            while (counter>value)
+            {
+                if (value % aux==0)
+                {
+                    Console.WriteLine("Divissor="+aux);
+                    return;
+                }
+                counter--;
+                aux = aux + 1;
+               
+            }
+            
+                        
         }
 
         private static void computePollardP1(BigInteger a, int k, BigInteger n, BigInteger bound)
@@ -64,12 +93,12 @@ namespace lab4
                 else
                 {
                     Console.WriteLine("D=" + d.ToString());
-                    Console.ReadLine();
+                    //Console.ReadLine();
                     return;
                 }
             }
             Console.WriteLine("Please Run again with another Bound");
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         private static List<BigInteger> generateBoundList(BigInteger bound)
