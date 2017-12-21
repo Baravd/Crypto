@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,13 +22,16 @@ namespace lab4
 
             //generate random between [2 and n) 
 
+
             BigInteger a = BigInteger.Parse("2");
 
-            List<BigInteger> predefinedNumbers= new List<BigInteger>();
-            
+            List<BigInteger> predefinedNumbers = new List<BigInteger>();
+
+/*
 
             predefinedNumbers.Add(BigInteger.Parse("4204458777"));
             predefinedNumbers.Add(BigInteger.Parse("8921796065"));
+            predefinedNumbers.Add(BigInteger.Parse("1241143"));
             predefinedNumbers.Add(BigInteger.Parse("6057318955"));
             predefinedNumbers.Add(BigInteger.Parse("1281936157"));
             predefinedNumbers.Add(BigInteger.Parse("8733973167"));
@@ -35,54 +40,72 @@ namespace lab4
             predefinedNumbers.Add(BigInteger.Parse("7460145079"));
             predefinedNumbers.Add(BigInteger.Parse("9218338053"));
             predefinedNumbers.Add(BigInteger.Parse("1275948761"));
+*/
+
             var watch = System.Diagnostics.Stopwatch.StartNew();
+            //B = 13;
+
             foreach (var predefinedNumber in predefinedNumbers)
             {
                 computeClassicalFactorization(predefinedNumber);
             }
             watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
+            var elapsedMs = watch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
 
-            watch.Start();
-            int k = (int)lcmForList(generateBoundList(B));
+            var watch2 = System.Diagnostics.Stopwatch.StartNew();
+            watch2.Start();
+            BigInteger k = lcmForList(generateBoundList(B));
+            Console.WriteLine("!!!!!k=" + k);
             foreach (var predefinedNumber in predefinedNumbers)
             {
-                computePollardP1(a,k,predefinedNumber,B);
+                computePollardP1(a, k, predefinedNumber, B);
+                a = BigInteger.Parse("2");
             }
-            watch.Stop();
-            var elapsedMs2 = watch.ElapsedMilliseconds;
-            Console.WriteLine("Time For classic="+elapsedMs);
-            Console.WriteLine("Time For Pollar p-1=" + elapsedMs2);
-            Console.ReadLine();
+            watch2.Stop();
+            //var elapsedMs2 = watch.ElapsedMilliseconds;
+            var elapsedMs2 = watch2.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
 
-            computePollardP1(a, k, n, B);
+            Console.WriteLine("Time For classic=" + elapsedMs * 10000);
+            Console.WriteLine("Time For Pollar p-1=" + elapsedMs2 * 10000);
+
+
+            BigInteger b = BigInteger.Parse("2");
+            Console.WriteLine("-----Read numbers-----");
+            computePollardP1(b, k, n, B);
+            Console.ReadLine();
         }
 
         private static void computeClassicalFactorization(BigInteger value)
         {
             BigInteger aux = BigInteger.Parse("2");
-            BigInteger counter = value * value;
-            while (counter>value)
+            for (BigInteger i = 0; i < value; i++)
             {
-                if (value % aux==0)
+                if (value % aux == 0)
                 {
-                    Console.WriteLine("Divissor="+aux);
+                    Console.WriteLine("Divissor=" + aux);
                     return;
                 }
-                counter--;
                 aux = aux + 1;
-               
             }
-            
-                        
         }
 
-        private static void computePollardP1(BigInteger a, int k, BigInteger n, BigInteger bound)
+        private static bool isPrime(BigInteger x)
         {
-            int aux = 2;
+            for (BigInteger i = 2; i < x / 2; i++)
+            {
+                if (x % i == 0)
+                    return false;
+            }
+            return true;
+        }
+
+        private static void computePollardP1(BigInteger a, BigInteger k, BigInteger n, BigInteger bound)
+        {
+            BigInteger aux = 2;
             while (aux < bound)
             {
-                a = BigInteger.Pow(aux, k) % n;
+                //a = BigInteger.Pow(aux, k) % n;
+                a = BigInteger.ModPow(aux, k, n);
                 BigInteger d = gcdNrMari(a - 1, n);
                 if (d == 1 || d == n)
                 {
@@ -131,7 +154,8 @@ namespace lab4
 
         public static BigInteger cmmmc(BigInteger a, BigInteger b)
         {
-            return a * b / gcdNrMari(a, b);
+            //return a * b / gcdNrMari(a, b);
+            return a * b / BigInteger.GreatestCommonDivisor(a, b);
         }
 
         private static BigInteger lcmForList(List<BigInteger> values)
